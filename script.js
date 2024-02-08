@@ -11,66 +11,63 @@ function getComputerChoice() {
     }
 }
 
-function doRound(playerSelection, computerSelection) {
-    if (playerSelection == 'rock' && computerSelection == 'scissors') {
-        console.log('You win, rock beats scissors');
-        return true;
+function playRound(playerSelection, computerSelection, screen) {
+    if (playerSelection === 'rock' && computerSelection == 'scissors') {
+        screen.textContent = 'You win, rock beats scissors\n';
+        return 1;
     }
-    if (playerSelection == 'rock' && computerSelection == 'paper') {
-        console.log('You lose, paper beats rock');
-        return false;
+    if (playerSelection === 'rock' && computerSelection == 'paper') {
+        screen.textContent ='You lose, paper beats rock\n';
+        return 0;
     }
-    if (playerSelection == 'scissors' && computerSelection == 'rock') {
-        console.log('You lose, rock beats scissors');
-        return false;
+    if (playerSelection === 'paper' && computerSelection == 'rock') {
+        screen.textContent = 'You lose, rock beats scissors\n';
+        return 0;
     }
-    if (playerSelection == 'scissors' && computerSelection == 'paper') {
-        console.log('You win, scissors beats paper');
-        return true;
+    if (playerSelection === 'paper' && computerSelection == 'paper') {
+        screen.textContent = 'You win, scissors beats paper\n';
+        return 1;
     }
-    if (playerSelection == 'paper' && computerSelection == 'rock') {
-        console.log('You win, paper beats rock');
-        return true;
+    if (playerSelection === 'scissors' && computerSelection == 'rock') {
+        screen.textContent = 'You win, paper beats rock\n';
+        return 1;
     }
-    if (playerSelection == 'paper' && computerSelection == 'scissors') {
-        console.log('You lose, scissors beats paper');
-        return false;
+    if (playerSelection === 'scissors' && computerSelection == 'scissors') {
+        screen.textContent = 'You lose, scissors beats paper\n';
+        return 0;
     }
-    if (playerSelection == computerSelection) {
-        console.log('Tie, replay')
-        let getPlayerChoice;
-        while (getPlayerChoice != 'rock' && getPlayerChoice != 'paper' && getPlayerChoice != 'scissors') {
-            getPlayerChoice = prompt("Rock, paper, scissors").toLowerCase();
-        }
-        return doRound(getPlayerChoice, getComputerChoice());
+    if (playerSelection === computerSelection) {
+        screen.textContent = 'Tie\n';
+        return 2;
     }
 }
 
 function game() {
     let playerScore = 0;
     let computerScore = 0;
-    let getPlayerChoice;
     let outcome;
-    for (let i = 0; i<5; i++) {
-        getPlayerChoice = undefined;
-        while (getPlayerChoice != 'rock' && getPlayerChoice != 'paper' && getPlayerChoice != 'scissors') {
-            getPlayerChoice = prompt("Rock, paper, scissors").toLowerCase();
-        }
-        outcome = doRound(getPlayerChoice, getComputerChoice());
-        if (outcome) {
-            playerScore ++;
-        }
-        else {
-            computerScore ++;
-        }
-        console.log(playerScore, computerScore);
-        if (playerScore == 3) {
-            return 'You win the game!';
-        }
-        else if (computerScore == 3) {
-            return 'You lose the game, too bad!';
-        }
+    let options = ['rock', 'paper', 'scissors'];
+    const buttons = document.querySelectorAll('button');
+    const screen = document.querySelector('div');
+    for (let i = 0; i<3; i++) {
+        buttons[i].addEventListener('click', () => {
+            outcome = playRound(options[i], getComputerChoice(), screen);
+            if (outcome === 0) {
+                computerScore ++;
+            }
+            else if (outcome === 1) {
+                playerScore ++;
+            }
+            screen.textContent += `player:${playerScore} computer:${computerScore}`;
+            if (playerScore === 5) {
+                screen.textContent = 'You won the entire game!';
+            }
+            else if (computerScore === 5) {
+                screen.textContent = 'The computer won the entire game!';
+            }
+        });
     }
+    
 }
 
-console.log(game());
+game();
