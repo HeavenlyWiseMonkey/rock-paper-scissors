@@ -11,33 +11,34 @@ function getComputerChoice() {
     }
 }
 
-function playRound(playerSelection, computerSelection, screen) {
+function playRound(playerSelection, computerSelection) {
+    const description = document.querySelector('.description');
     if (playerSelection === 'rock' && computerSelection == 'scissors') {
-        screen.textContent = 'You win, rock beats scissors\n';
+        description.textContent = 'Rock beats scissors';
         return 1;
     }
     if (playerSelection === 'rock' && computerSelection == 'paper') {
-        screen.textContent ='You lose, paper beats rock\n';
+        description.textContent = 'Paper beats rock';
         return 0;
     }
     if (playerSelection === 'paper' && computerSelection == 'rock') {
-        screen.textContent = 'You lose, rock beats scissors\n';
+        description.textContent = 'Rock beats scissors';
         return 0;
     }
     if (playerSelection === 'paper' && computerSelection == 'paper') {
-        screen.textContent = 'You win, scissors beats paper\n';
+        description.textContent = 'Scissors beats paper';
         return 1;
     }
     if (playerSelection === 'scissors' && computerSelection == 'rock') {
-        screen.textContent = 'You win, paper beats rock\n';
+        description.textContent = 'Paper beats rock';
         return 1;
     }
     if (playerSelection === 'scissors' && computerSelection == 'scissors') {
-        screen.textContent = 'You lose, scissors beats paper\n';
+        description.textContent = 'Scissors beats paper';
         return 0;
     }
     if (playerSelection === computerSelection) {
-        screen.textContent = 'Tie\n';
+        description.textContent = 'Tie';
         return 2;
     }
 }
@@ -48,22 +49,29 @@ function game() {
     let outcome;
     let options = ['rock', 'paper', 'scissors'];
     const buttons = document.querySelectorAll('button');
-    const screen = document.querySelector('div');
+    const scores = document.querySelector('.scores');
+    const round = document.querySelector('.round')
+    const conclusion = document.querySelector('.conclusion');
     for (let i = 0; i<3; i++) {
         buttons[i].addEventListener('click', () => {
-            outcome = playRound(options[i], getComputerChoice(), screen);
-            if (outcome === 0) {
-                computerScore ++;
-            }
-            else if (outcome === 1) {
-                playerScore ++;
-            }
-            screen.textContent += `player:${playerScore} computer:${computerScore}`;
-            if (playerScore === 5) {
-                screen.textContent = 'You won the entire game!';
-            }
-            else if (computerScore === 5) {
-                screen.textContent = 'The computer won the entire game!';
+            ongoing = computerScore != 5 && playerScore != 5;
+            if (ongoing) {
+                outcome = playRound(options[i], getComputerChoice(), screen);
+                if (outcome === 0) {
+                    computerScore ++;
+                    round.textContent = 'You lose!';
+                }
+                else if (outcome === 1 && computerScore != 5 && playerScore != 5) {
+                    playerScore ++;
+                    round.textContent = 'You win!';
+                }
+                scores.textContent = `player:${playerScore} computer:${computerScore}`;
+                if (playerScore === 5) {
+                    conclusion.textContent = 'You won the entire game!';
+                }
+                else if (computerScore === 5) {
+                    conclusion.textContent = 'The computer won the entire game!';
+                }
             }
         });
     }
