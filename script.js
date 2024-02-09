@@ -56,7 +56,7 @@ function game() {
         buttons[i].addEventListener('click', () => {
             ongoing = computerScore != 5 && playerScore != 5;
             if (ongoing) {
-                outcome = playRound(options[i], getComputerChoice(), screen);
+                outcome = playRound(options[i], getComputerChoice());
                 if (outcome === 0) {
                     computerScore ++;
                     round.textContent = 'You lose!';
